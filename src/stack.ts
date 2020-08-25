@@ -2,8 +2,12 @@ import * as cdk from "@aws-cdk/core";
 import { StaticPageStack } from "./static-page-stack";
 
 const app = new cdk.App();
-const { DOMAIN, FOLDER } = process.env;
-if (DOMAIN === undefined) {
+const { DOMAIN, FOLDER, ROOTDOMAIN, SUBDOMAIN, BEHAVIORARN } = process.env;
+let fullDomain = DOMAIN;
+if(SUBDOMAIN !== undefined && ROOTDOMAIN !== undefined) {
+  fullDomain = SUBDOMAIN + ROOTDOMAIN;
+}
+if (fullDomain === undefined) {
   throw new Error("domain has not been defined");
 }
 if (FOLDER === undefined) {
@@ -13,5 +17,8 @@ if (FOLDER === undefined) {
 new StaticPageStack(app, `StaticPage`, {
   stackName: `StaticPage-${DOMAIN}`.split(".").join("-"),
   folder: FOLDER,
-  fullDomain: DOMAIN,
+  fullDomain: fullDomain,
+  domain: ROOTDOMAIN,
+  subdomain: SUBDOMAIN,
+  behaviorArn: BEHAVIORARN
 });
