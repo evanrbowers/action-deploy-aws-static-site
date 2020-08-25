@@ -67,7 +67,7 @@ export class StaticPageStack extends cdk.Stack {
 
     if(behaviorArn) {
       //Create Cloudfront Distribution with Lambda function to handle directing to .html
-      const lambdaVersion = lambda.Version.fromVersionArn(this, 'LambdaRedirects', 'arn:aws:lambda:us-east-1:637984146391:function:serverlessrepo-standard-r-StandardRedirectsForClou-1Y2FDXQ3VX53:1');
+      const lambdaVersion = lambda.Version.fromVersionArn(this, 'LambdaRedirects', behaviorArn);
       behavior = { isDefaultBehavior: true, lambdaFunctionAssociations: [{eventType: cloudfront.LambdaEdgeEventType.ORIGIN_REQUEST, lambdaFunction: lambdaVersion }]};
     }
 
