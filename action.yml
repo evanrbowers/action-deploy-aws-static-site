@@ -9,8 +9,17 @@ inputs:
     required: true
     description: 'The secret key of your AWS Credentials'
   domain:
-    required: true
+    required: false
     description: 'Full qualified domain (eg: subdomain.example.com) where the site will be deployed'
+  subDomain:
+    required: false
+    description: 'Sub domain (eg: subdomain) where the site will be deployed, subDomain + rootDomain can be specified instead of domain'
+  rootDomain:
+    required: false
+    description: 'Root of domain (eg: example.com) where the site will be deployed'
+  behaviorArn:
+    required: false
+    description: 'The lambda arn of the lambda behavior you want attached to cloudfront (example, redirect to index.html for sub directories'
   publish_dir:
     required: true
     description: 'Local directory to be published as a static site'

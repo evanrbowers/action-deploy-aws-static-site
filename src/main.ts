@@ -23,6 +23,9 @@ async function run(): Promise<void> {
       ? raw_publish_dir
       : path.join(`${process.env.GITHUB_WORKSPACE}`, raw_publish_dir);
     core.debug(`Publishing directory '${publish_dir}' to '${domain}'`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
+    const ROOTDOMAIN = core.getInput("rootDomain");
+    const SUBDOMAIN = core.getInput("subDomain");
+    const BEHAVIORARN = core.getInput("behaviorArn");
 
     const awsCredentials = {
       AWS_ACCESS_KEY_ID,
@@ -34,7 +37,7 @@ async function run(): Promise<void> {
         process.execPath
       )}:$PATH" node node_modules/aws-cdk/bin/cdk.js deploy --require-approval never)`,
       {
-        env: { ...awsCredentials, DOMAIN: domain, FOLDER: publish_dir },
+        env: { ...awsCredentials, DOMAIN: domain, SUBDOMAIN, ROOTDOMAIN, BEHAVIORARN, FOLDER: publish_dir },
       }
     );
   } catch (error) {
