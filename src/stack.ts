@@ -4,7 +4,7 @@ import { StaticPageStack } from "./static-page-stack";
 const app = new cdk.App();
 const { DOMAIN, FOLDER, ROOTDOMAIN, SUBDOMAIN, BEHAVIORARN } = process.env;
 let fullDomain = DOMAIN;
-if(SUBDOMAIN !== undefined && ROOTDOMAIN !== undefined) {
+if (SUBDOMAIN !== undefined && ROOTDOMAIN !== undefined) {
   fullDomain = SUBDOMAIN + ROOTDOMAIN;
 }
 if (fullDomain === undefined) {
@@ -17,8 +17,8 @@ if (FOLDER === undefined) {
 new StaticPageStack(app, `StaticPage`, {
   stackName: `StaticPage-${DOMAIN}`.split(".").join("-"),
   folder: FOLDER,
-  fullDomain: fullDomain,
+  fullDomain,
   domain: ROOTDOMAIN,
   subdomain: SUBDOMAIN,
-  behaviorArn: BEHAVIORARN
+  behaviorArn: BEHAVIORARN,
 });

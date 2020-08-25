@@ -10,7 +10,6 @@ import {
   getSubdomain,
   getDomain,
 } from "./utils";
-import { LambdaFunctionAssociation } from "@aws-cdk/aws-cloudfront";
 
 const env = {
   // Stack must be in us-east-1, because the ACM certificate for a
@@ -34,18 +33,18 @@ export class StaticPageStack extends cdk.Stack {
       stackName: string;
       folder: string;
       fullDomain: string;
-      domain: string | null;
-      subdomain: string | null;
-      behaviorArn: string | null;
+      domain: string | undefined;
+      subdomain: string | undefined;
+      behaviorArn: string | undefined;
     }
   ) {
     super(scope, id, { stackName, env });
 
-    if(!subdomain) {
+    if (!subdomain) {
       subdomain = getSubdomain(fullDomain);
     }
 
-    if(!domain) {
+    if (!domain) {
       domain = getDomain(fullDomain);
     }
 
@@ -63,12 +62,24 @@ export class StaticPageStack extends cdk.Stack {
     );
     websiteBucket.grantRead(originAccessIdentity);
 
-    let behavior : cloudfront.Behavior = { isDefaultBehavior: true };
+    let behavior: cloudfront.Behavior = { isDefaultBehavior: true };
 
-    if(behaviorArn) {
+    if (behaviorArn) {
       //Create Cloudfront Distribution with Lambda function to handle directing to .html
-      const lambdaVersion = lambda.Version.fromVersionArn(this, 'LambdaRedirects', behaviorArn);
-      behavior = { isDefaultBehavior: true, lambdaFunctionAssociations: [{eventType: cloudfront.LambdaEdgeEventType.ORIGIN_REQUEST, lambdaFunction: lambdaVersion }]};
+      const lambdaVersion = lambda.Version.fromVersionArn(
+        this,
+        "LambdaRedirects",
+        behaviorArn
+      );
+      behavior = {
+        isDefaultBehavior: true,
+        lambdaFunctionAssociations: [
+          {
+            eventType: cloudfront.LambdaEdgeEventType.ORIGIN_REQUEST,
+            lambdaFunction: lambdaVersion,
+          },
+        ],
+      };
     }
 
     const distribution = new cloudfront.CloudFrontWebDistribution(

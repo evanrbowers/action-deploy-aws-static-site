@@ -4,10 +4,10 @@ import * as route53 from "@aws-cdk/aws-route53";
 import * as targets from "@aws-cdk/aws-route53-targets";
 import * as acm from "@aws-cdk/aws-certificatemanager";
 
-export function getSubdomain(fullDomain: string): string | null {
+export function getSubdomain(fullDomain: string): string | undefined {
   const subdomainArray = fullDomain.split(".").slice(0, -2);
   if (subdomainArray.length === 0) {
-    return null;
+    return undefined;
   } else {
     return subdomainArray.join(".");
   }
@@ -42,7 +42,7 @@ export function getCertificate(
 
 export function setDNSRecord(
   scope: cdk.Stack,
-  subdomain: string | null,
+  subdomain: string | undefined,
   zone: route53.IHostedZone,
   distribution: cloudfront.CloudFrontWebDistribution
 ): route53.ARecord {
@@ -51,6 +51,6 @@ export function setDNSRecord(
     target: route53.RecordTarget.fromAlias(
       new targets.CloudFrontTarget(distribution)
     ),
-    recordName: subdomain === null ? undefined : subdomain,
+    recordName: subdomain,
   });
 }

@@ -8,6 +8,9 @@ test("Empty Stack", () => {
     fullDomain: "sub.example.com",
     folder: "./images",
     stackName: "MyTestStack",
+    subdomain: undefined,
+    domain: undefined,
+    behaviorArn: undefined,
   });
   expectCDK(stack).to(haveResource("AWS::S3::Bucket"));
 });

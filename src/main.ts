@@ -37,7 +37,14 @@ async function run(): Promise<void> {
         process.execPath
       )}:$PATH" node node_modules/aws-cdk/bin/cdk.js deploy --require-approval never)`,
       {
-        env: { ...awsCredentials, DOMAIN: domain, SUBDOMAIN, ROOTDOMAIN, BEHAVIORARN, FOLDER: publish_dir },
+        env: {
+          ...awsCredentials,
+          DOMAIN: domain,
+          SUBDOMAIN,
+          ROOTDOMAIN,
+          BEHAVIORARN,
+          FOLDER: publish_dir,
+        },
       }
     );
   } catch (error) {

@@ -1,7 +1,7 @@
 import { getSubdomain, getDomain } from "./utils";
 
 test("getSubdomain", () => {
-  expect(getSubdomain("example.com")).toBe(null);
+  expect(getSubdomain("example.com")).toBe(undefined);
   expect(getSubdomain("sub.example.com")).toBe("sub");
 });
 
