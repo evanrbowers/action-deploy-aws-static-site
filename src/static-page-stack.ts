@@ -3,6 +3,7 @@ import * as s3 from "@aws-cdk/aws-s3";
 import * as lambda from "@aws-cdk/aws-lambda";
 import * as s3deploy from "@aws-cdk/aws-s3-deployment";
 import * as cloudfront from "@aws-cdk/aws-cloudfront";
+
 import {
   getDNSZone,
   getCertificate,
@@ -73,6 +74,10 @@ export class StaticPageStack extends cdk.Stack {
       );
       behavior = {
         isDefaultBehavior: true,
+        compress: true,
+        minTtl: cdk.Duration.millis(1),
+        maxTtl: cdk.Duration.millis(31536000),
+        defaultTtl: cdk.Duration.millis(86400),
         lambdaFunctionAssociations: [
           {
             eventType: cloudfront.LambdaEdgeEventType.ORIGIN_REQUEST,
@@ -95,6 +100,7 @@ export class StaticPageStack extends cdk.Stack {
             behaviors: [behavior],
           },
         ],
+        viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         viewerCertificate: certificate,
         comment: `CDN for static page on ${fullDomain}`,
         priceClass: cloudfront.PriceClass.PRICE_CLASS_ALL,
