@@ -1,8 +1,8 @@
 import * as cdk from "@aws-cdk/core";
-import * as s3 from "@aws-cdk/aws-s3";
 import * as lambda from "@aws-cdk/aws-lambda";
 import * as s3deploy from "@aws-cdk/aws-s3-deployment";
 import * as cloudfront from "@aws-cdk/aws-cloudfront";
+import { AutoDeleteBucket } from '@mobileposse/auto-delete-bucket'
 
 import {
   getDNSZone,
@@ -52,7 +52,7 @@ export class StaticPageStack extends cdk.Stack {
     const zone = getDNSZone(this, domain);
     const certificate = getCertificate(this, fullDomain, zone);
 
-    const websiteBucket = new s3.Bucket(this, "WebsiteBucket");
+    const websiteBucket = new AutoDeleteBucket(this, 'WebsiteBucket')
 
     const originAccessIdentity = new cloudfront.OriginAccessIdentity(
       this,
